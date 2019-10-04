@@ -15,5 +15,12 @@
   "bugs": {
     "url": "https://github.com/JelleDBZ/Railgun_BLE/issues"
   },
-  "homepage": "https://github.com/JelleDBZ/Railgun_BLE#readme"
+  "homepage": "https://github.com/JelleDBZ/Railgun_BLE#readme",
+  "keywords": [
+    "railgun",
+    "bluetooth"
+  ],
+  "dependencies": {
+    "@abandonware/bleno": "^0.5.1-1"
+  }
 }

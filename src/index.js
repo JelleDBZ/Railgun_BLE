@@ -1,12 +1,6 @@
 const bleno = require("@abandonware/bleno");
 const EventEmitter = require('events');
 
-const readline =  require('readline').createInterface({
-    input: process.stdin,
-    output: process.stdout
-})
-
-
 // Choose a concise name for your device
 const PERIPHERAL_NAME = "railgun_jelle";
 
@@ -21,7 +15,6 @@ const BATTERY_LEVEL_CHARACTERISTIC_UUID = "2A19";
 // Custom
 const RAILGUN_COMMAND_SERVICE_UUID = "eac9cf2d-1d6e-4ab5-8582-bdc124b15e52";
 const RAILGUN_CHARGE_CHARACTERISTIC_UUID = "b65a60ce-b0e9-43a3-a991-4a908a5705bc";
-
 const RAILGUN_SHOOT_CHARACTERISTIC_UUID = "f17315d2-83e5-4f5e-9893-216ab8c5d9d6";
 
 class RailGun extends EventEmitter {
@@ -129,8 +122,6 @@ class RailgunShootCharacteristic extends bleno.Characteristic {
         }
     }
 }
-
-
 class BatteryLevelCharacteristic extends bleno.Characteristic {
   constructor(railgun) {
     super({

@@ -1,12 +1,6 @@
 const bleno = require("@abandonware/bleno");
 const EventEmitter = require('events');
 
-const readline =  require('readline').createInterface({
-    input: process.stdin,
-    output: process.stdout
-})
-
-
 // Choose a concise name for your device
 const PERIPHERAL_NAME = "railgun_jelle";
 
@@ -21,6 +15,7 @@ const BATTERY_LEVEL_CHARACTERISTIC_UUID = "2A19";
 // Custom
 const RAILGUN_COMMAND_SERVICE_UUID = "eac9cf2d-1d6e-4ab5-8582-bdc124b15e52";
 const RAILGUN_CHARGE_CHARACTERISTIC_UUID = "b65a60ce-b0e9-43a3-a991-4a908a5705bc";
+const RAILGUN_SHOOT_CHARACTERISTIC_UUID = "f17315d2-83e5-4f5e-9893-216ab8c5d9d6";
 
 class RailGun extends EventEmitter {
   constructor() {
@@ -58,16 +53,6 @@ class RailGun extends EventEmitter {
   }
 }
 
-let hugeCannon = new RailGun();
-
-
-//make function that shoots when you type 'shoot' in command
-readline.question(`Please enter a command: `, (command) => {
-    if (command == 'shoot'){
-        hugeCannon.fire();
-        readline.resume();
-    }
-})
 class RailgunChargeCharacteristic extends bleno.Characteristic {
     constructor(railgun) {
         super({
@@ -102,7 +87,41 @@ class RailgunChargeCharacteristic extends bleno.Characteristic {
         }
     }
 }
+let hugeCannon = new RailGun;
+class RailgunShootCharacteristic extends bleno.Characteristic {
+    constructor(railgun) {
+        super({
+            uuid: RAILGUN_SHOOT_CHARACTERISTIC_UUID,
+            properties: ["write"],
+            value: null,
+            descriptors: [
+                new bleno.Descriptor({
+                    uuid: "2901",
+                    value: "Shooting Railgun"
+                  })
+            ]
+        });
 
+        this.railgun = railgun;
+    }
+
+    onWriteRequest(data, offset, withoutResponse, callback) {
+        try {
+            if(data.length != 1) {
+                callback(this.RESULT_INVALID_ATTRIBUTE_LENGTH);
+                return;
+            }
+
+            let value = data.readUInt8();
+            console.log(`Received command to shoot railgun: ${value}`);
+            this.railgun.fire();
+            callback(this.RESULT_SUCCESS);
+        } catch (err) {
+            console.error(err);
+            callback(this.RESULT_UNLIKELY_ERROR);
+        }
+    }
+}
 class BatteryLevelCharacteristic extends bleno.Characteristic {
   constructor(railgun) {
     super({
@@ -187,7 +206,8 @@ bleno.on("advertisingStart", err => {
   let commandService = new bleno.PrimaryService({
       uuid: RAILGUN_COMMAND_SERVICE_UUID,
       characteristics: [
-          new RailgunChargeCharacteristic(hugeCannon)
+          new RailgunChargeCharacteristic(hugeCannon),
+          new RailgunShootCharacteristic(hugeCannon)
       ]
   });
 

@@ -1,6 +1,12 @@
 const bleno = require("@abandonware/bleno");
 const EventEmitter = require('events');
 
+const readline =  require('readline').createInterface({
+    input: process.stdin,
+    output: process.stdout
+})
+
+
 // Choose a concise name for your device
 const PERIPHERAL_NAME = "railgun_jelle";
 
@@ -20,7 +26,7 @@ class RailGun extends EventEmitter {
   constructor() {
     super();
     this.batteryLevel = 100;
-
+    
     setInterval(() => {
       this.use_power(1);
     }, 60000);
@@ -56,11 +62,12 @@ let hugeCannon = new RailGun();
 
 
 //make function that shoots when you type 'shoot' in command
-
-// setInterval(() => {
-//   hugeCannon.fire();
-// }, 8000);
-
+readline.question(`Please enter a command: `, (command) => {
+    if (command == 'shoot'){
+        hugeCannon.fire();
+        readline.resume();
+    }
+})
 class RailgunChargeCharacteristic extends bleno.Characteristic {
     constructor(railgun) {
         super({

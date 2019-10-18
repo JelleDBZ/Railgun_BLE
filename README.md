@@ -1,4 +1,5 @@
 # Railgun 
+## Made by Jelle and Jasper
 Welcome to our railgun project featuring "bluetooth".
 this is a simple application you can run on your raspberry pi.
 you can connect with your raspberry pi with the following app.

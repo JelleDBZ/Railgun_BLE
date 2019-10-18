@@ -44,17 +44,19 @@ $ npm install pm2@latest -g
 # or
 $ yarn global add pm2
 ```
+### change to super user
+```
+sudo su
+```
 ### start the project
 ```
-pm2 start src/index.js
+pm2 start 'path to index.js'
 ```
 ### setup startup script
 ```
 pm2 startup
+pm2 save
 ```
-this command will output another command, simply copy it and run it.
-Now if everything went correct, everytime you restart your pi.
-The application will automatically start.
 
 ## Testing
 
@@ -64,4 +66,4 @@ and connect to your device, in this case it will be called: **railgun_Jelle**
 
 once found, connect to it and start testing.
 there are two characteristics, a **shoot** and **charge** characteristic.
-when you call upon the characteristic it will ask for a value, simply type in an integer and continue.
+when you call upon the characteristic it will ask for a value, simply type in an integer, select Uint8 and send.
